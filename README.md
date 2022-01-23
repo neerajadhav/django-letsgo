@@ -1,14 +1,15 @@
 # Django startproject
 
-
-A small shell script to start off you django app development. It rids you the hustle of repeating the same processes everytime you start a django project and gets you django application up and running within two strikes of a button. It automates: 
+A shell script to automate the django project creation process. This also includes the initial routing. The following actions are performed when you run this script: 
 * Creation of the project folder 
 * Creating and activating virtual enviroment
 * Updating pip to latest version
+* Installing neccessary pip packages
 * Starting django project *django-admin startproject *
 * Starting an app *python manage.py startapp *
 * Writing to settings.py, urls.py, views.py, tempalates
 * Making migrations and migrating them
+* Running the server for the first time
 
 
 ## Getting Started

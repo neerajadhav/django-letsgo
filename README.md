@@ -1,4 +1,4 @@
-# Django startproject
+# Django Letsgo
 
 A shell script to automate the django project creation process. This also includes the initial routing. The following actions are performed when you run this script: 
 * Creation of the project folder 

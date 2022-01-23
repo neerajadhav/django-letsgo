@@ -187,6 +187,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -236,6 +240,7 @@ printf '\n created '$app'/views.py\n'
 cd $app
 mkdir templates
 cat > templates/home.html << _EOF_
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -243,6 +248,7 @@ cat > templates/home.html << _EOF_
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
     <h2>Home</h2>
@@ -253,6 +259,9 @@ _EOF_
 printf '\n created '$app'/templates/home.html\n'
 
 cd ..
+
+mkdir --verbose static static/css static/images static/js
+touch static/css/main.css static/js/script.js
 
 printf "\n ----------- starting server -------------\n\n"
 

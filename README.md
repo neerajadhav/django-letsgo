@@ -8,6 +8,7 @@ A shell script to automate the django project creation process. This also includ
 * Starting django project *django-admin startproject *
 * Starting an app *python manage.py startapp *
 * Writing to settings.py, urls.py, views.py, tempalates
+* Adding static files to project
 * Making migrations and migrating them
 * Running the server for the first time
 

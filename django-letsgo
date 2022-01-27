@@ -1,11 +1,14 @@
 #!/bin/bash
 
-folder=$1
-
-# create folder and cd into it
-while [[ $folder = "" ]]; do
-    read -p 'Name of folder cant be blank. Enter name of folder: ' folder
+while getopts a:b options; do
+	case $options in
+		a) letsgo=$OPTARG;;
+		b) startauthapp=1;;
+	esac
 done
+
+letsgo (){
+folder=$1
 if [[ -d "$folder" ]]; then
     while [[ -d "$folder" ]]; do
     read -p 'Folder already exists, try another name: ' folder
@@ -263,9 +266,137 @@ cd ..
 mkdir --verbose static static/css static/images static/js
 touch static/css/main.css static/js/script.js
 
+}
+
+startauthapp (){
+	
+# startauthapp
+python manage.py startapp authapp
+
+# connect app and project
+sed -i "s/INSTALLED_APPS = \[/INSTALLED_APPS = \[\n    'authapp',/" base/settings.py
+sed -i "s/path('admin\/', admin.site.urls),/path('admin\/', admin.site.urls),\n    path('', include('authapp.urls')),/" base/urls.py
+
+# create template folder
+mkdir -p authapp/templates/authapp
+
+# create templates
+touch authapp/templates/authapp/login.html authapp/templates/authapp/register.html
+
+# create forms and urls
+touch authapp/forms.py authapp/urls.py
+
+# edit files
+
+# forms.py
+cat > authapp/forms.py << _EOF_
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from django.contrib.auth.models import User
+
+class CreateUserForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+_EOF_
+
+# urls.py
+cat > authapp/urls.py << _EOF_
+from django.urls import path, include
+from . import views
+
+urlpatterns = [
+    path('login/', views.login, name='login'),
+    path('logout/', views.logoutUser, name='logout'),
+    path('register/', views.register, name='register'),
+]
+_EOF_
+
+# views.py
+cat > authapp/views.py << _EOF_
+from django.shortcuts import render, redirect
+from .forms import CreateUserForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as lgin, logout
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            lgin(request, user)
+            return redirect("home")
+        else:
+            messages.info(request, 'Username or password is incorrect')
+            return render(request, 'authapp/login.html')
+    context = {}
+    return render(request, 'authapp/login.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+
+def register(request):
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Account created successfully for ' + user)
+
+            return redirect('login')
+    context = {
+        'form': form
+    }
+    return render(request, 'authapp/register.html', context)
+_EOF_
+
+# login.html
+cat > authapp/templates/authapp/login.html << _EOF_
+<h1>Login</h1>
+{% for message in messages %}
+    <p>{{ message }}</p>
+{% endfor %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" value="{{ username }}" />
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" />
+    <input type="submit" value="Login" />
+</form>
+_EOF_
+
+# register.html
+cat > authapp/templates/authapp/register.html << _EOF_
+<h1>Register</h1>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Register">
+</form>
+_EOF_
+
+}
+
+emptycheck=$letsgo
+if [[ $emptycheck = "" ]]; then
+	while [[ $emptycheck = "" ]]; do
+		read -p 'Name of folder cant be blank. Enter name of folder: ' emptycheck
+		letsgo $emptycheck
+	done
+else
+	letsgo $emptycheck
+fi
+ 
+if [[ $startauthapp -eq 1 ]];then
+startauthapp $var
+fi
+
 printf "\n ----------- starting server -------------\n\n"
-
-
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver

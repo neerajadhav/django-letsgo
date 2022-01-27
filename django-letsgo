@@ -1,11 +1,25 @@
 #!/bin/bash
 
-while getopts a:b options; do
+while getopts p:ah options; do
 	case $options in
-		a) letsgo=$OPTARG;;
-		b) startauthapp=1;;
+		p) letsgo=$OPTARG;;
+		a) startauthapp=1;;
+        h) help=1;;
+        *) help=1;;
 	esac
 done
+
+help (){
+    echo -e "
+    
+    django-letsgo -p <projectname>
+    
+    flags:
+     -p <projectname> : Start a django project with the name <projectname>
+     -a               : Start the authapp with working login and register pages
+     -h               : Show this help
+    "
+}
 
 letsgo (){
 folder=$1
@@ -382,21 +396,25 @@ _EOF_
 
 }
 
-emptycheck=$letsgo
-if [[ $emptycheck = "" ]]; then
-	while [[ $emptycheck = "" ]]; do
-		read -p 'Name of folder cant be blank. Enter name of folder: ' emptycheck
-		letsgo $emptycheck
-	done
+if [[ $help -eq 1 ]];then
+help
 else
-	letsgo $emptycheck
-fi
- 
-if [[ $startauthapp -eq 1 ]];then
-startauthapp $var
-fi
+    emptycheck=$letsgo
+    if [[ $emptycheck = "" ]]; then
+        while [[ $emptycheck = "" ]]; do
+            read -p 'Name of folder cant be blank. Enter name of folder: ' emptycheck
+            letsgo $emptycheck
+        done
+    else
+        letsgo $emptycheck
+    fi
+    
+    if [[ $startauthapp -eq 1 ]];then
+    startauthapp $var
+    fi
 
-printf "\n ----------- starting server -------------\n\n"
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
+    printf "\n ----------- starting server -------------\n\n"
+    python manage.py makemigrations
+    python manage.py migrate
+    python manage.py runserver
+fi

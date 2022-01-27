@@ -11,6 +11,7 @@ A shell script to automate the django project creation process. This also includ
 * Adding static files to project
 * Making migrations and migrating them
 * Running the server for the first time
+* Add a AuthApp with working login and Register
 
 
 ## Getting Started
@@ -21,7 +22,12 @@ To get started, download the latest release and extract the files on your PC
 * Place the script anywhere you wish
 * Open the folder in Git-Bash and type the following command
 ```
-$ source django-letsgo <projectname>
+$ source django-letsgo -p <projectname>
+    
+    flags:
+     -p <projectname> : Start a django project with the name <projectname>
+     -a               : Start the authapp with working login and register pages
+     -h               : Show this help
 ```
 * Wait for few seconds and your server is running.
 

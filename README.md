@@ -7,11 +7,11 @@ A shell script to automate the django project creation process. This also includ
 * Installing neccessary pip packages
 * Starting django project `django-admin startproject`
 * Starting an app `python manage.py startapp`
-* Writing to settings.py, urls.py, views.py, tempalates
+* Writing to settings .py, urls .py, views .py, templates
 * Adding static files to project
 * Making migrations and migrating them
 * Running the server for the first time
-* Add a AuthApp with working login and Register
+* Add an AuthApp with working login and Register
 
 
 ## Getting Started
@@ -33,5 +33,5 @@ $ source django-letsgo -p <projectname>
 
 
 ## Contributing
-To contribute just make a PR 
+To contribute just make a [PR](https://github.com/neerajadhav/django-letsgo)
 

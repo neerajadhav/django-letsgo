@@ -5,8 +5,8 @@ A shell script to automate the django project creation process. This also includ
 * Creating and activating virtual enviroment
 * Updating pip to latest version
 * Installing neccessary pip packages
-* Starting django project *django-admin startproject *
-* Starting an app *python manage.py startapp *
+* Starting django project `django-admin startproject`
+* Starting an app `python manage.py startapp`
 * Writing to settings.py, urls.py, views.py, tempalates
 * Adding static files to project
 * Making migrations and migrating them
